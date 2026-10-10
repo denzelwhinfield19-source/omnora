@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#071426">
+<title>OMNORA — The World at Your Order</title>
+<style>
+:root{--navy:#071426;--panel:#10233b;--gold:#f5bd50;--white:#f7f9fc;--muted:#aab8ca}
+*{box-sizing:border-box}
+body{margin:0;background:var(--navy);color:var(--white);font-family:Arial,sans-serif}
+header{padding:18px 6%;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #263750;gap:12px;flex-wrap:wrap}
+.logo{font-size:25px;font-weight:900;letter-spacing:3px;color:var(--gold)}
+.tag{font-size:12px;color:var(--muted);margin-top:5px}
+nav{display:flex;gap:15px;flex-wrap:wrap}
+a{color:var(--white);text-decoration:none}
+nav a:hover{color:var(--gold)}
+main{max-width:1150px;margin:auto;padding:30px 5%}
+.hero{text-align:center;padding:45px 0 35px}
+.eyebrow{color:var(--gold);letter-spacing:3px;font-size:12px;font-weight:bold}
+h1{font-size:clamp(35px,7vw,65px);margin:16px 0}
+h1 span{color:var(--gold)}
+p{line-height:1.6;color:var(--muted)}
+.search{display:flex;gap:8px;max-width:650px;margin:25px auto}
+input,select,textarea{width:100%;padding:13px;border-radius:9px;border:1px solid #344963;background:#0a192c;color:white;font:inherit}
+button{border:0;border-radius:9px;background:var(--gold);color:#151c26;font-weight:bold;padding:13px 17px;cursor:pointer}
+button:hover{filter:brightness(1.08)}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:35px 0 18px}
+h2{margin:0;font-size:25px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.filters button{background:#182d47;color:white}
+.filters button.active{background:var(--gold);color:#151c26}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid #243b57;border-radius:14px;overflow:hidden}
+.product-art{height:145px;display:grid;place-items:center;background:linear-gradient(135deg,#172f4b,#253f5b);font-size:62px}
+.card-content{padding:16px}
+.card h3{margin:8px 0}
+.small{font-size:12px;color:var(--muted)}
+.price{font-size:22px;font-weight:bold;color:var(--gold);margin:12px 0}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.actions button{flex:1;padding:10px;font-size:12px}
+.secondary{background:#263d58;color:white}
+.notice{font-size:12px;color:#f4d79b;margin-top:10px}
+.panel{margin-top:40px;background:var(--panel);border:1px solid #263b55;padding:23px;border-radius:14px}
+form{display:grid;gap:12px;margin-top:18px}
+footer{text-align:center;border-top:1px solid #263750;padding:28px;color:var(--muted);font-size:13px;margin-top:45px}
+#message{color:#a7edc1;margin-top:12px}
+@media(max-width:500px){header{align-items:flex-start}.search{flex-direction:column}.hero{padding-top:25px}main{padding:20px 4%}}
+</style>
+</head>
+<body>
+<header>
+<div><div class="logo">OMNORA</div><div class="tag">THE WORLD AT YOUR ORDER</div></div>
+<nav><a href="#products">Explore</a><a href="#compare">Compare</a><a href="#source">Source a Product</a><a href="#cart">Cart (<span id="cart-count">0</span>)</a></nav>
+</header>
+<main>
+<section class="hero">
+<div class="eyebrow">ONE WORLD. MORE POSSIBILITIES.</div>
+<h1>The World <span>at Your Order.</span></h1>
+<p>Discover products, explore choices, and find what you need — all in one place.</p>
+<div class="search"><input id="search" placeholder="What are you looking for?"><button onclick="render()">Search products</button></div>
+<p class="small">OMNORA is a prototype. Product listings and prices below are demonstrations.</p>
+</section>
+<section id="products">
+<div class="section-head"><h2>Explore Products</h2><select id="sort" onchange="render()" style="max-width:180px"><option value="featured">Featured</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option></select></div>
+<div class="filters" id="filters"></div>
+<div class="grid" id="product-grid"></div>
+<p id="empty" hidden>No matching demonstration products found.</p>
+</section>
+<section id="compare" class="panel">
+<div class="section-head"><h2>Compare Products</h2><button class="secondary" onclick="clearCompare()">Clear comparison</button></div>
+<p>Select Compare on up to three products to see them together here.</p>
+<div id="compare-list"></div>
+</section>
+<section id="cart" class="panel">
+<div class="section-head"><h2>Your Cart</h2><button class="secondary" onclick="clearCart()">Clear cart</button></div>
+<div id="cart-list">Your cart is empty.</div>
+<div class="price" id="subtotal">Subtotal: $0.00</div>
+<p class="small">Demonstration cart only. Checkout and real payments are not enabled.</p>
+</section>
+<section id="source" class="panel">
+<h2>Find Something Specific?</h2>
+<p>Tell us what you're looking for. This demo records your request only in this page session; it does not contact suppliers.</p>
+<form id="source-form">
+<input name="product" placeholder="Product you're looking for" required>
+<input name="quantity" type="number" min="1" placeholder="Quantity needed" required>
+<input name="country" placeholder="Destination country" required>
+<input name="budget" placeholder="Budget and currency (optional)">
+<input name="email" type="email" placeholder="Contact email (optional)">
+<button type="submit">Submit demo request</button>
+</form>
+<div id="message" role="status"></div>
+</section>
+<section class="panel">
+<h2>Become an OMNORA Seller</h2>
+<p>Interested in joining the future marketplace? Register your interest in this demo.</p>
+<form id="seller-form">
+<input name="business" placeholder="Business name" required>
+<input name="contact" placeholder="Contact name" required>
+<input name="email" type="email" placeholder="Email address" required>
+<button type="submit">Register interest</button>
+</form>
+<div id="seller-message" role="status"></div>
+</section>
+<section class="panel">
+<h2>Our Mission</h2>
+<p>OMNORA aims to connect consumers, businesses, retailers, wholesalers, and suppliers, helping people discover and compare products across markets. Real supplier coverage, verified prices, delivery options, and ordering services will require further development.</p>
+</section>
+</main>
+<footer>© 2026 OMNORA · The World at Your Order.<br>Prototype demonstration · No real orders or payments.</footer>
+<script>
+const products=[
+{id:1,name:"Wireless Headphones",category:"Electronics",price:49.99,emoji:"🎧",seller:"Demo Store",detail:"Wireless listening headphones — sample listing."},
+{id:2,name:"Smart Watch",category:"Electronics",price:79.50,emoji:"⌚",seller:"Demo Store",detail:"Smart watch with activity features — sample listing."},
+{id:3,name:"Travel Backpack",category:"Accessories",price:34.00,emoji:"🎒",seller:"Sample Goods",detail:"Everyday travel backpack — sample listing."},
+{id:4,name:"Running Shoes",category:"Fashion",price:59.00,emoji:"👟",seller:"Sample Goods",detail:"Comfortable everyday shoes — sample listing."},
+{id:5,name:"Desk Lamp",category:"Home",price:22.50,emoji:"💡",seller:"Demo Home",detail:"Modern desk lamp — sample listing."},
+{id:6,name:"Coffee Maker",category:"Home",price:44.00,emoji:"☕",seller:"Demo Home",detail:"Kitchen coffee maker — sample listing."},
+{id:7,name:"Digital Camera",category:"Electronics",price:199.00,emoji:"📷",seller:"Demo Store",detail:"Digital camera — sample listing."},
+{id:8,name:"Sports Bottle",category:"Accessories",price:12.00,emoji:"🥤",seller:"Sample Goods",detail:"Reusable sports bottle — sample listing."}
+];
+let category="All",cart={},comparison=[];
+const money=n=>"$"+n.toFixed(2);
+function renderFilters(){
+const cats=["All",...new Set(products.map(p=>p.category))];
+document.getElementById("filters").innerHTML=cats.map(c=>`<button class="${category===c?"active":""}" onclick="setCategory('${c}')">${c}</button>`).join("");
+}
+function setCategory(c){category=c;render();}
+function render(){
+renderFilters();
+let list=products.filter(p=>(category==="All"||p.category===category)&&p.name.toLowerCase().includes(document.getElementById("search").value.toLowerCase()));
+const sort=document.getElementById("sort").value;
+if(sort==="low")list.sort((a,b)=>a.price-b.price);
+if(sort==="high")list.sort((a,b)=>b.price-a.price);
+document.getElementById("empty").hidden=list.length>0;
+document.getElementById("product-grid").innerHTML=list.map(p=>`<article class="card"><div class="product-art">${p.emoji}</div><div class="card-content"><div class="small">${p.category} · DEMO LISTING</div><h3>${p.name}</h3><div class="small">${p.seller}</div><div class="price">${money(p.price)}</div><p>${p.detail}</p><div class="actions"><button onclick="addCart(${p.id})">Add to cart</button><button class="secondary" onclick="compareProduct(${p.id})">Compare</button></div></div></article>`).join("");
+renderCart();renderCompare();
+}
+function addCart(id){cart[id]=(cart[id]||0)+1;renderCart();}
+function changeQty(id,delta){cart[id]=(cart[id]||0)+delta;if(cart[id]<=0)delete cart[id];renderCart();}
+function clearCart(){cart={};renderCart();}
+function renderCart(){
+const ids=Object.keys(cart);document.getElementById("cart-count").textContent=ids.reduce((n,id)=>n+cart[id],0);
+document.getElementById("cart-list").innerHTML=ids.length?ids.map(id=>{let p=products.find(x=>x.id===+id);return `<p>${p.name} — ${money(p.price)} × ${cart[id]} <button class="secondary" onclick="changeQty(${id},-1)">−</button> <button onclick="changeQty(${id},1)">+</button> <button class="secondary" onclick="delete cart[${id}];renderCart()">Remove</button></p>`}).join(""):"Your cart is empty.";
+const total=ids.reduce((n,id)=>n+products.find(p=>p.id===+id).price*cart[id],0);
+document.getElementById("subtotal").textContent="Subtotal: "+money(total);
+}
+function compareProduct(id){if(comparison.includes(id))return;if(comparison.length>=3){alert("Compare up to three products. Clear the comparison to start again.");return;}comparison.push(id);renderCompare();}
+function clearCompare(){comparison=[];renderCompare();}
+function renderCompare(){document.getElementById("compare-list").innerHTML=comparison.length?comparison.map(id=>{let p=products.find(x=>x.id===id);return `<div class="card-content"><b>${p.name}</b> · ${money(p.price)} · ${p.category} · ${p.seller}</div>`}).join(""):"No products selected for comparison yet.";}
+document.getElementById("source-form").addEventListener("submit",e=>{e.preventDefault();const d=new FormData(e.target);document.getElementById("message").textContent="Demo request prepared for "+d.get("product")+". Nothing has been sent to suppliers.";e.target.reset();});
+document.getElementById("seller-form").addEventListener("submit",e=>{e.preventDefault();document.getElementById("seller-message").textContent="Thank you. Your demo registration was successful on this page only; no information was sent or saved.";e.target.reset();});
+document.getElementById("search").addEventListener("input",render);
+render();
+</script>
+</body>
+</html>
